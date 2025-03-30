@@ -178,8 +178,14 @@ function retry(func, attempts) {
  * cos(3.141592653589793) ends
  *
  */
-function logger(/* func, logFunc */) {
-  throw new Error('Not implemented');
+function logger(func, logFunc) {
+  return (...rest) => {
+    const restString = rest.map((arg) => JSON.stringify(arg)).join(',');
+    logFunc(`${func.name}(${restString}) starts`);
+    const result = func(...rest);
+    logFunc(`${func.name}(${restString}) ends`);
+    return result;
+  };
 }
 
 /**
